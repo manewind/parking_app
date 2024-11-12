@@ -1,11 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 
-interface HeaderProps {
-  onSignUpClick: () => void;
-}
 
-const Header: React.FC<HeaderProps> = ({ onSignUpClick }) => {
+const Header = () => {
   return (
     <header className="bg-blue-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -13,9 +10,9 @@ const Header: React.FC<HeaderProps> = ({ onSignUpClick }) => {
           MyPark
         </Link>
         <nav className="space-x-4">
-          <button onClick={onSignUpClick} className="hover:text-blue-400">
+          <Link href = '/register' className="hover:text-blue-400">
             Sign Up
-          </button>
+          </Link> 
           <Link href="/memberships" className="hover:text-blue-400">
             Memberships
           </Link>
