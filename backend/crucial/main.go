@@ -5,7 +5,6 @@
         "fmt"
         "log"
         "net/http"
-        "parking_app/backend/db"
         "github.com/gin-gonic/gin"
         _ "github.com/denisenkom/go-mssqldb" 
     )

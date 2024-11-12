@@ -1,4 +1,4 @@
-package db
+package crucial
 
 import (
     "database/sql"
