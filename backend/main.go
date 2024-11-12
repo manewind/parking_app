@@ -44,7 +44,6 @@
         db := connectToDB()
         defer db.Close()
 
-        // Пример тестового запроса
         var result int
         err := db.QueryRow("SELECT 1").Scan(&result)
         if err != nil {

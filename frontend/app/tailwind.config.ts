@@ -1,18 +1,12 @@
-import type { Config } from "tailwindcss";
-
-export default {
+// tailwind.config.ts
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{js,ts,jsx,tsx}', // проверка на все файлы в папке pages
+    './components/**/*.{js,ts,jsx,tsx}', // проверка на все файлы в папке components
   ],
   theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-    },
+    extend: {},
   },
   plugins: [],
-} satisfies Config;
+};
