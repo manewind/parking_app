@@ -1,41 +1,52 @@
 package handlers
 
 import (
-	// "fmt"
-	"net/http"
-	// "parking_app/backend/models"
-	// "parking_app/backend/services"
-	// "golang.org/x/crypto/bcrypt"
-	// "encoding/json"
-	
+    "fmt"
+    "parking_app/backend/models"
+    "parking_app/backend/services"
+    "parking_app/backend/db"
+    "golang.org/x/crypto/bcrypt"
+    "github.com/gin-gonic/gin"
+    "net/http"
 )
 
-func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	// var user models.User
-	// decoder := json.NewDecoder(r.Body)
-	// err := decoder.Decode(&user)
-	// if err != nil {
-	// 	http.Error(w, "Неверный формат данных", http.StatusBadRequest)
-	// 	return
-	// }
+func RegisterHandler(c *gin.Context) {
+    var user models.User
+    err := c.ShouldBindJSON(&user)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "error": "Неверный формат данных",
+        })
+        return
+    }
 
-	// hash, err := bcrypt.GenerateFromPassword([]byte(user.PasswordHash), bcrypt.DefaultCost)
-	// if err != nil {
-	// 	http.Error(w, "Ошибка при хешировании пароля", http.StatusInternalServerError)
-	// 	return
-	// }
+    hash, err := bcrypt.GenerateFromPassword([]byte(user.PasswordHash), bcrypt.DefaultCost)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": "Ошибка при хешировании пароля",
+        })
+        return
+    }
 
-	// user.PasswordHash = string(hash)
-	// db := services.ConnectToDB()
-	// defer db.Close()
+    user.PasswordHash = string(hash)
 
-	// createdUser, err := services.CreateUser(db, user)
-	// if err != nil {
-	// 	http.Error(w, fmt.Sprintf("Ошибка при создании пользователя: %v", err), http.StatusInternalServerError)
-	// 	return
-	// }
+    dbConn, err := db.ConnectToDB()
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": fmt.Sprintf("Ошибка при подключении к базе данных: %v", err),
+        })
+        return
+    }
+    defer dbConn.Close()
 
-	// // Возвращаем ответ с успешной регистрацией
-	// w.WriteHeader(http.StatusOK)
-	// json.NewEncoder(w).Encode(createdUser)
+    createdUser, err := services.CreateUser(dbConn, user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": fmt.Sprintf("Ошибка при создании пользователя: %v", err),
+        })
+        return
+    }
+
+    // Ответ с созданным пользователем
+    c.JSON(http.StatusOK, createdUser)
 }

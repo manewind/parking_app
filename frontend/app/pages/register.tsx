@@ -1,5 +1,4 @@
-// pages/register.tsx
-
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -11,20 +10,34 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    
     if (password !== confirmPassword) {
       alert('Пароли не совпадают');
       return;
     }
-    
-    router.push('/login');
+
+    try {
+      const response = await axios.post('http://localhost:8000/register', {
+        name,
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        router.push('/login');
+      } else {
+        alert(`Ошибка регистрации: ${response.data.message || 'Неизвестная ошибка'}`);
+      }
+    } catch (error) {
+      console.error('Ошибка запроса:', error);
+      alert('Ошибка при подключении к серверу');
+    }
   };
 
   return (
-    <div className="container max-w-md mx-auto p-6">
+    <div className="container max-w-md mx-auto p-6 ">
       <h2 className="text-2xl mb-4 text-center">Регистрация</h2>
       <form onSubmit={handleRegister} className="space-y-4">
         <div>
@@ -35,7 +48,7 @@ const Register = () => {
             placeholder="Введите ваше имя"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded text-black"
           />
         </div>
 
@@ -47,8 +60,7 @@ const Register = () => {
             placeholder="Введите email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
+            className="w-full p-2 border border-gray-300 rounded text-black"          />
         </div>
 
         <div>
@@ -59,8 +71,7 @@ const Register = () => {
             placeholder="Введите пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
+            className="w-full p-2 border border-gray-300 rounded text-black"          />
         </div>
 
         <div>
@@ -71,8 +82,7 @@ const Register = () => {
             placeholder="Подтвердите пароль"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
+            className="w-full p-2 border border-gray-300 rounded text-black"          />
         </div>
 
         <button
