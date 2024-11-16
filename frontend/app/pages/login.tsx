@@ -1,7 +1,6 @@
-// pages/login.tsx
-
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const Login = () => {
   const router = useRouter();
@@ -9,15 +8,33 @@ const Login = () => {
   // Состояние для формы
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Логика для отправки данных на сервер
-    console.log('Авторизация', { email, password });
+    if (!email || !password) {
+      setError('Пожалуйста, заполните все поля');
+      return;
+    }
 
-    // Пример редиректа после успешного входа
-    router.push('/');
+    try {
+      const response = await axios.post('http://localhost:8000/login', {
+        email,
+        password: password,
+      });
+
+      // Если логин успешен, сохраняем токен и перенаправляем
+      localStorage.setItem('token', response.data.token);
+      router.push('/');  // Перенаправление на главную
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data.error || 'Не удалось авторизоваться');
+      } else {
+        setError('Произошла ошибка при авторизации');
+      }
+      console.error('Ошибка при авторизации:', err);
+    }
   };
 
   return (
@@ -32,7 +49,7 @@ const Login = () => {
             placeholder="Введите email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded text-black"
           />
         </div>
 
@@ -44,9 +61,11 @@ const Login = () => {
             placeholder="Введите пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded text-black"
           />
         </div>
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
 
         <button
           type="submit"
@@ -58,10 +77,7 @@ const Login = () => {
 
       <p className="mt-4 text-center">
         Нет аккаунта?{' '}
-        <a
-          href="/register"
-          className="text-blue-500"
-        >
+        <a href="/register" className="text-blue-500">
           Зарегистрируйтесь
         </a>
       </p>
