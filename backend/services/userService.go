@@ -47,3 +47,20 @@ func GetUserByEmail(db *sql.DB, email string) (models.User, error) {
 
     return user, nil
 }
+
+func GetUserByID(db *sql.DB, userID int) (models.User, error) {
+    var user models.User
+    query := `SELECT id, username, email, profile_picture FROM users WHERE id = @UserID`
+    
+    err := db.QueryRow(query, sql.Named("UserID", userID)).Scan(&user.ID, &user.Username, &user.Email, &user.ProfilePicture)
+    
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return models.User{}, fmt.Errorf("пользователь с таким ID не найден")
+        }
+        return models.User{}, fmt.Errorf("ошибка при получении пользователя по ID: %v", err)
+    }
+
+    return user, nil
+}
+

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 type Membership = {
   title: string;
@@ -53,6 +53,12 @@ const memberships: Membership[] = [
 ];
 
 const Memberships = () => {
+  const [animate, setAnimate] = useState<boolean>(false);
+
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-semibold mb-8 text-center">Choose Your Plan</h1>
@@ -60,29 +66,32 @@ const Memberships = () => {
         {memberships.map((membership, index) => (
           <div
             key={index}
-            className={`p-8 rounded-lg shadow-lg ${membership.bgColor} ${membership.textColor} min-h-[400px] flex flex-col justify-between`}
+            className={`p-8 rounded-lg shadow-lg ${membership.bgColor} ${membership.textColor} min-h-[400px] flex flex-col justify-between transition-all duration-500 ease-out ${
+              animate
+                ? `opacity-100 translate-y-0`
+                : `opacity-0 translate-y-10`
+            }`}
+            style={{
+              animationDelay: `${index * 0.2}s`,
+            }}
           >
-            <div>
-              <h2 className="text-3xl font-bold mb-2">{membership.title}</h2>
-              <p className="mb-4">{membership.description}</p>
-              <p className="text-lg font-semibold mb-2">Price: {membership.price}</p>
-              <p className="text-sm mb-4">Booking Hours: {membership.bookingHours}</p>
-              <ul className="space-y-2">
-                {membership.privileges.map((privilege, idx) => (
-                  <li
-                    key={idx}
-                    className={`${
-                      privilege.allowed ? 'text-black' : 'text-gray-400 line-through'
-                    }`}
-                  >
-                    {privilege.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <button
-              className="mt-6 py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-700"
-            >
+            <h2 className="text-3xl font-bold mb-2">{membership.title}</h2>
+            <p className="mb-4">{membership.description}</p>
+            <p className="text-lg font-semibold mb-2">Price: {membership.price}</p>
+            <p className="text-sm mb-4">Booking Hours: {membership.bookingHours}</p>
+            <ul className="space-y-2">
+              {membership.privileges.map((privilege, idx) => (
+                <li
+                  key={idx}
+                  className={`${
+                    privilege.allowed ? 'text-black' : 'text-gray-400 line-through'
+                  }`}
+                >
+                  {privilege.name}
+                </li>
+              ))}
+            </ul>
+            <button className="mt-6 py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-700">
               Choose {membership.title}
             </button>
           </div>

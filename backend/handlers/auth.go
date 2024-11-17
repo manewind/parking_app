@@ -109,3 +109,31 @@ func LoginHandler(c *gin.Context) {
         "token": tokenString,
     })
 }
+
+func MeHandler(c *gin.Context) {
+    userID := c.MustGet("user_id").(float64) 
+
+    dbConn, err := db.ConnectToDB()
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": fmt.Sprintf("Ошибка при подключении к базе данных: %v", err),
+        })
+        return
+    }
+    defer dbConn.Close()
+
+    user, err := services.GetUserByID(dbConn, int(userID))
+    if err != nil {
+        c.JSON(http.StatusNotFound, gin.H{
+            "error": "Пользователь не найден",
+        })
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{
+        "username":      user.Username,
+        "email":         user.Email,
+        "profilePicture": user.ProfilePicture,
+    })
+}
+
