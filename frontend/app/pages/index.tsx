@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Main from '../components/main';
 import Header from '../components/header';
+import Footer from '../components/footer';
 
 const Index = () => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Мы обновляем состояние только на клиенте
     setIsClient(true);
   }, []);
 
@@ -18,6 +18,7 @@ const Index = () => {
     <div>
       <Header />
       <Main />
+      <Footer/>
     </div>
   );
 };

@@ -14,13 +14,13 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert('Пароли не совпадают');
+      alert('Passwords do not match');
       return;
     }
 
     try {
       const response = await axios.post('http://localhost:8000/register', {
-        username:name,
+        username: name,
         email,
         password,
       });
@@ -28,24 +28,24 @@ const Register = () => {
       if (response.status === 200) {
         router.push('/login');
       } else {
-        alert(`Ошибка регистрации: ${response.data.message || 'Неизвестная ошибка'}`);
+        alert(`Registration error: ${response.data.message || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error('Ошибка запроса:', error);
-      alert('Ошибка при подключении к серверу');
+      console.error('Request error:', error);
+      alert('Error connecting to the server');
     }
   };
 
   return (
-    <div className="container max-w-md mx-auto p-6 ">
-      <h2 className="text-2xl mb-4 text-center">Регистрация</h2>
+    <div className="container max-w-md mx-auto p-6">
+      <h2 className="text-2xl mb-4 text-center">Registration</h2>
       <form onSubmit={handleRegister} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-semibold">Имя</label>
+          <label htmlFor="name" className="block text-sm font-semibold">Name</label>
           <input
             id="name"
             type="text"
-            placeholder="Введите ваше имя"
+            placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded text-black"
@@ -57,49 +57,52 @@ const Register = () => {
           <input
             id="email"
             type="email"
-            placeholder="Введите email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded text-black"          />
+            className="w-full p-2 border border-gray-300 rounded text-black"
+          />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-semibold">Пароль</label>
+          <label htmlFor="password" className="block text-sm font-semibold">Password</label>
           <input
             id="password"
             type="password"
-            placeholder="Введите пароль"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded text-black"          />
+            className="w-full p-2 border border-gray-300 rounded text-black"
+          />
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-semibold">Подтверждение пароля</label>
+          <label htmlFor="confirmPassword" className="block text-sm font-semibold">Confirm Password</label>
           <input
             id="confirmPassword"
             type="password"
-            placeholder="Подтвердите пароль"
+            placeholder="Confirm your password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded text-black"          />
+            className="w-full p-2 border border-gray-300 rounded text-black"
+          />
         </div>
 
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded mt-4"
         >
-          Зарегистрироваться
+          Register
         </button>
       </form>
 
       <p className="mt-4 text-center">
-        Уже есть аккаунт?{' '}
+        Already have an account?{' '}
         <a
           href="/login"
           className="text-blue-500"
         >
-          Войдите
+          Log in
         </a>
       </p>
     </div>

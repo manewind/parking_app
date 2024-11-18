@@ -1,52 +1,60 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { useAuth } from '../contexts/authContext'; // Импортируем useAuth
 
 const Login = () => {
   const router = useRouter();
+  const { login } = useAuth(); // Используем функцию login из контекста
 
-  // Состояние для формы
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!email || !password) {
-      setError('Пожалуйста, заполните все поля');
+      setError('Please fill in all fields');
       return;
     }
-
+  
+    console.log('Attempting login with email:', email);  // Логируем email перед отправкой
+  
     try {
       const response = await axios.post('http://localhost:8000/login', {
         email,
         password: password,
       });
-
-      // Если логин успешен, сохраняем токен и перенаправляем
+  
+      console.log('Login successful, token received:', response.data.token); // Логируем успешный ответ
+  
+      // Сохраняем токен в localStorage и обновляем состояние в контексте
       localStorage.setItem('token', response.data.token);
-      router.push('/');  // Перенаправление на главную
+      login(response.data.token); // Обновляем состояние isLoggedIn через контекст
+  
+      router.push('/');  // Перенаправляем на главную страницу
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.error || 'Не удалось авторизоваться');
+        setError(err.response.data.error || 'Login failed');
+        console.error('Axios error during login:', err.response.data);
       } else {
-        setError('Произошла ошибка при авторизации');
+        setError('An error occurred during login');
+        console.error('General error during login:', err);
       }
-      console.error('Ошибка при авторизации:', err);
     }
   };
 
   return (
     <div className="container max-w-md mx-auto p-6">
-      <h2 className="text-2xl mb-4">Вход</h2>
+      <h2 className="text-2xl mb-4 text-center">Login</h2>
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label htmlFor="email" className="block text-sm font-semibold">Email</label>
           <input
             id="email"
             type="email"
-            placeholder="Введите email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded text-black"
@@ -54,11 +62,11 @@ const Login = () => {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-semibold">Пароль</label>
+          <label htmlFor="password" className="block text-sm font-semibold">Password</label>
           <input
             id="password"
             type="password"
-            placeholder="Введите пароль"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded text-black"
@@ -71,14 +79,14 @@ const Login = () => {
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded mt-4"
         >
-          Войти
+          Log in
         </button>
       </form>
 
       <p className="mt-4 text-center">
-        Нет аккаунта?{' '}
+        Don't have an account?{' '}
         <a href="/register" className="text-blue-500">
-          Зарегистрируйтесь
+          Register
         </a>
       </p>
     </div>

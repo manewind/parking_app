@@ -29,11 +29,11 @@ func main() {
     r := gin.Default()
 
     r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:3000"},
-        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-        AllowHeaders:     []string{"Content-Type"},
-        AllowCredentials: true,
-        MaxAge: 24 * time.Hour,
+        AllowOrigins:     []string{"http://localhost:3000"}, 
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, 
+        AllowHeaders:     []string{"Content-Type", "Authorization"}, 
+        AllowCredentials: true, 
+        MaxAge:           24 * time.Hour, 
     }))
 
     r.GET("/ping", func(c *gin.Context) {
@@ -42,6 +42,7 @@ func main() {
         })
     })
 
+    // Регистрируем все маршруты
     routes.RegisterRoutes(r)
 
     err = r.Run(":8000")
