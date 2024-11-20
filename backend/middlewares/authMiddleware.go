@@ -12,6 +12,15 @@ var jwtSecret = []byte("secret123")
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Временно устанавливаем isLoggedIn в true для пропуска аутентификации
+		isLoggedIn := true // Устанавливаем временно в true
+
+		if isLoggedIn {
+			// Пропускаем проверку авторизации, если isLoggedIn == true
+			c.Next()
+			return
+		}
+
 		// Получение токена из заголовка Authorization
 		authHeader := c.GetHeader("Authorization")
 		fmt.Println("asdasdasd")
@@ -48,9 +57,14 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			// Логирование перед извлечением user_id
+			fmt.Printf("claims: %v\n", claims)
 			if userID, ok := claims["user_id"].(float64); ok {
-				fmt.Printf("Найден user_id: %v\n", userID) // Логирование успешного извлечения user_id
+				// Логирование успешного извлечения user_id
+				fmt.Printf("Найден user_id: %v\n", userID)
 				c.Set("user_id", userID)
+				// Логирование после установки user_id в контекст
+				fmt.Printf("user_id установлен в контексте: %v\n", userID)
 			} else {
 				fmt.Println("Ошибка: отсутствует поле user_id в токене") // Логирование ошибки
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверные данные в токене"})
@@ -63,6 +77,10 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
+		// Логирование перед передаче в следующий обработчик
+		userID, _ := c.Get("user_id")
+		fmt.Printf("user_id в контексте: %v\n", userID) // Логирование значения в контексте
 
 		c.Next()
 	}

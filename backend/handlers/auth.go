@@ -111,8 +111,28 @@ func LoginHandler(c *gin.Context) {
 }
 
 func MeHandler(c *gin.Context) {
-    userID := c.MustGet("user_id").(float64) 
+    // Получение userID из контекста
+    userID, ok := c.Get("user_id")
+    if !ok {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": "user_id не найден в контексте",
+        })
+        return
+    }
 
+    // Преобразование userID в float64
+    userIDFloat, ok := userID.(float64)
+    if !ok {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": "Ошибка преобразования user_id в число",
+        })
+        return
+    }
+
+    // Вывод значения userID
+    fmt.Printf("Проверка userID: %v\n", userIDFloat)
+
+    // Подключение к базе данных
     dbConn, err := db.ConnectToDB()
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{
@@ -122,18 +142,26 @@ func MeHandler(c *gin.Context) {
     }
     defer dbConn.Close()
 
-    user, err := services.GetUserByID(dbConn, int(userID))
+    // Выполнение запроса к базе данных
+    user, err := services.GetUserByID(dbConn, int(userIDFloat))
     if err != nil {
+        fmt.Printf("Ошибка поиска пользователя по ID: %v\n", err) // Логирование ошибки
         c.JSON(http.StatusNotFound, gin.H{
             "error": "Пользователь не найден",
         })
         return
     }
 
+    // Возвращение данных пользователя с логом
+    fmt.Printf("Данные пользователя успешно получены для userID: %v\n", userIDFloat) // Лог успешного получения данных
     c.JSON(http.StatusOK, gin.H{
-        "username":      user.Username,
-        "email":         user.Email,
+        "message":        "User data retrieved successfully",
+        "user_id":        userIDFloat,
+        "username":       user.Username,
+        "email":          user.Email,
         "profilePicture": user.ProfilePicture,
     })
 }
+
+
 

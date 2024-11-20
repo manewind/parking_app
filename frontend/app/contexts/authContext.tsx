@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import axios from 'axios';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -26,33 +25,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log('Токен из localStorage:', token);  // Логирование токена в консоль
+    console.log('Токен из localStorage при монтировании:', token);  // Логирование токена при монтировании
     if (token) {
-      login(token); // если токен есть, то делаем login
+      // Просто обновляем состояние, если токен найден
+      setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false); // если токена нет, то явно указываем isLoggedIn как false
     }
-  }, []); // useEffect должен сработать только при монтировании компонента
-
+  }, []);  // useEffect сработает при монтировании компонента
 
   const login = (token: string) => {
     localStorage.setItem('token', token);
-    setIsLoggedIn(true); // обновляем состояние, что пользователь залогинен
-
-    axios
-      .get('http://localhost:8000/me', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setProfilePicture(response.data.profilePicture);
-        setUsername(response.data.username);
-      })
-      .catch((error) => {
-        console.error('Ошибка при получении данных пользователя:', error);
-        logout(); // если ошибка - вызываем logout
-      });
+    setIsLoggedIn(true); // Обновляем состояние логина при успешном входе
   };
 
   const logout = () => {
