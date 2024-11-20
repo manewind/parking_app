@@ -14,6 +14,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Получение токена из заголовка Authorization
 		authHeader := c.GetHeader("Authorization")
+		fmt.Println("asdasdasd")
 		if authHeader == "" {
 			fmt.Println("Ошибка: отсутствует токен авторизации") // Логирование ошибки
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Отсутствует токен авторизации"})
