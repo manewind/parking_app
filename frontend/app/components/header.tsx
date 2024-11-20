@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { useAuth } from '../contexts/authContext';
 
 const Header = () => {
-  const { isLoggedIn, profilePicture, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
 
   useEffect(() => {
-    console.log('Auth state changed:', isLoggedIn); // Добавьте для отладки
+    console.log('Auth state changed:', isLoggedIn); // Логирование для отладки
   }, [isLoggedIn]);
 
   return (
@@ -19,25 +19,30 @@ const Header = () => {
           <Link href="/memberships" className="hover:text-blue-400">
             Memberships
           </Link>
+          <Link href="/booking" className="hover:text-blue-400">
+            Booking
+          </Link>
 
           {isLoggedIn ? (
-            <div className="flex items-center space-x-3">
-              {profilePicture ? (
-                <img
-                  src={profilePicture}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-400" />
-              )}
+            <>
               <button
                 onClick={logout}
-                className="hover:text-blue-400 text-sm font-medium"
+                className="hover:text-blue-400 text-l font-medium"
               >
                 Logout
               </button>
-            </div>
+
+              {/* Статическая картинка профиля, заменяем на "profilePicture.png" */}
+              <Link href="/profile">
+                
+                  <img
+                    src="/prfilePicture.png" // Указание статического пути к картинке
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+               
+              </Link>
+            </>
           ) : (
             <>
               <Link href="/login" className="hover:text-blue-400">
@@ -48,9 +53,6 @@ const Header = () => {
               </Link>
             </>
           )}
-          <Link href="/booking" className="hover:text-blue-400">
-            Booking
-          </Link>
         </nav>
       </div>
     </header>
