@@ -1,9 +1,9 @@
 package routes
 
 import (
-    "parking_app/backend/handlers"
+    "backend/handlers"
     "github.com/gin-gonic/gin"
-    "parking_app/backend/middlewares"
+    "backend/middlewares"
 )
 
 func RegisterRoutes(r *gin.Engine) {

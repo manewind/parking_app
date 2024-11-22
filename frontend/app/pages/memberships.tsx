@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 type Membership = {
   title: string;
@@ -92,7 +93,9 @@ const Memberships = () => {
               ))}
             </ul>
             <button className="mt-6 py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-700">
+              <Link href = "/payment">
               Choose {membership.title}
+              </Link>
             </button>
           </div>
         ))}

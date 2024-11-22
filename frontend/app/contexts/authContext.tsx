@@ -21,7 +21,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [profilePicture, setProfilePicture] = useState<string | null>("/prfilePicture.png");
   const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,8 +46,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
       })
       .then((response) => {
-        setProfilePicture(response.data.profilePicture);
         setUsername(response.data.username);
+        setProfilePicture('/prfilePicture.png');
       })
       .catch((error) => {
         console.error('Ошибка при получении данных пользователя:', error);

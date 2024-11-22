@@ -19,24 +19,29 @@ const Header = () => {
           <Link href="/memberships" className="hover:text-blue-400">
             Memberships
           </Link>
+          <Link href="/booking" className="hover:text-blue-400">
+            Booking
+          </Link>
 
           {isLoggedIn ? (
             <div className="flex items-center space-x-3">
+              
+              <button
+                onClick={logout}
+                className="hover:text-blue-400 text-xl font-medium"
+              >
+                Logout
+              </button>
+              <Link href="/profile">
               {profilePicture ? (
                 <img
                   src={profilePicture}
                   alt="Profile"
                   className="w-10 h-10 rounded-full object-cover"
                 />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-400" />
-              )}
-              <button
-                onClick={logout}
-                className="hover:text-blue-400 text-sm font-medium"
-              >
-                Logout
-              </button>
+
+              ) : null}
+              </Link>
             </div>
           ) : (
             <>
@@ -46,11 +51,11 @@ const Header = () => {
               <Link href="/register" className="hover:text-blue-400">
                 Sign Up
               </Link>
+              
             </>
           )}
-          <Link href="/booking" className="hover:text-blue-400">
-            Booking
-          </Link>
+
+          
         </nav>
       </div>
     </header>

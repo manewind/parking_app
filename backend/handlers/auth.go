@@ -2,9 +2,9 @@ package handlers
 
 import (
     "fmt"
-    "parking_app/backend/models"
-    "parking_app/backend/services"
-    "parking_app/backend/db"
+    "backend/models"
+    "backend/services"
+    "backend/db"
     "golang.org/x/crypto/bcrypt"
     "github.com/dgrijalva/jwt-go"
     "github.com/gin-gonic/gin"
@@ -123,6 +123,7 @@ func MeHandler(c *gin.Context) {
     defer dbConn.Close()
 
     user, err := services.GetUserByID(dbConn, int(userID))
+    fmt.Println(user,err)
     if err != nil {
         c.JSON(http.StatusNotFound, gin.H{
             "error": "Пользователь не найден",
@@ -133,7 +134,6 @@ func MeHandler(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{
         "username":      user.Username,
         "email":         user.Email,
-        "profilePicture": user.ProfilePicture,
     })
 }
 

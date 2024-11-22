@@ -3,10 +3,10 @@ package main
 import (
     "fmt"
     "log"
-    "parking_app/backend/db"
+    "backend/db"
     "github.com/gin-gonic/gin"
     "github.com/gin-contrib/cors"
-    "parking_app/backend/routes"
+    "backend/routes"
     "net/http"
     "time"
 )

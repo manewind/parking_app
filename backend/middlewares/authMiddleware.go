@@ -12,7 +12,7 @@ var jwtSecret = []byte("secret123")
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Получение токена из заголовка Authorization
+		
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			fmt.Println("Ошибка: отсутствует токен авторизации") // Логирование ошибки

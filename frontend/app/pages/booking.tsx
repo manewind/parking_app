@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa"; // Using icons for VIP spots
 
-const parkingSpots = [
+interface ISpot {
+  id: number,
+  isVIP: boolean
+}
+
+const parkingSpots: ISpot[] = [
   { id: 1, isVIP: false },
   { id: 2, isVIP: true },
   { id: 3, isVIP: false },
@@ -40,13 +45,14 @@ const parkingSpots = [
   { id: 36, isVIP: false },
   { id: 37, isVIP: false },
   { id: 38, isVIP: true },
-  { id: 39, isVIP: false },
-  { id: 40, isVIP: false },
+  { id: 41, isVIP: true },
+  { id: 42, isVIP: true },
 ];
 
 const Bookings: React.FC = () => {
   const [selectedSpot, setSelectedSpot] = useState<number | null>(null); // state to track selected spot
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [floor, setFloor] = useState(1)
 
   useEffect(() => {
     // Set pageLoaded to true after the component mounts to trigger the page load animation
@@ -61,6 +67,13 @@ const Bookings: React.FC = () => {
     setSelectedSpot(spotId === selectedSpot ? null : spotId);
   };
 
+  const filterSpots = (spot: ISpot) => {
+    if(floor === 1){
+      return spot.isVIP
+    }
+    else return !spot.isVIP
+  }
+
   return (
     <div
       className={`container mx-auto px-4 py-8 transition-opacity duration-700 ease-in-out ${pageLoaded ? "opacity-100" : "opacity-0"}`}
@@ -68,10 +81,8 @@ const Bookings: React.FC = () => {
       {/* Page title */}
       <h1 className="text-3xl font-bold text-center mb-6">Booking</h1>
       <p className="text-center text-xl mb-8">Please select a parking spot</p>
-
-      {/* Parking spots grid */}
       <div className="grid grid-cols-5 gap-4">
-        {parkingSpots.map((spot, index) => (
+        {parkingSpots.filter(filterSpots).map((spot, index) => (
           <div
             key={spot.id}
             className={`relative flex items-center justify-center p-4 border-2 rounded-lg cursor-pointer transition-all duration-500 transform ease-in-out
@@ -82,21 +93,24 @@ const Bookings: React.FC = () => {
             onClick={() => handleSpotClick(spot.id)}
             style={{ animationDelay: `${index * 50}ms` }} // Delay for staggered animation
           >
-            {/* VIP icon */}
             {spot.isVIP && (
               <div className="absolute top-2 right-2 text-yellow-500">
                 <FaStar size={20} />
               </div>
             )}
             <p className={`text-center font-semibold ${selectedSpot === spot.id ? "text-white" : "text-gray-800"}`}>
-              {`Spot ${spot.id}`}
+              {`Spot ${index+1}`}
             </p>
           </div>
         ))}
       </div>
 
       {/* Confirm button */}
-      <div className="flex justify-center mt-8">
+      <div className="flex flex-col mt-8">
+        <div className="flex justify-center gap-4 mb-3">
+          <button onClick={() => setFloor(1)} className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition">First floor</button>
+          <button onClick={() => setFloor(2)} className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition">Second floor</button>
+        </div>
         <button
           className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition"
           disabled={selectedSpot === null} // Disable button if no spot is selected

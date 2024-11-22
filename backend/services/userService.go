@@ -2,7 +2,7 @@ package services
 
 import (
     "database/sql"
-    "parking_app/backend/models"
+    "backend/models"
     "fmt"
 )
 
@@ -50,9 +50,9 @@ func GetUserByEmail(db *sql.DB, email string) (models.User, error) {
 
 func GetUserByID(db *sql.DB, userID int) (models.User, error) {
     var user models.User
-    query := `SELECT id, username, email, profile_picture FROM users WHERE id = @UserID`
+    query := `SELECT id, username, email FROM users WHERE id = @UserID`
     
-    err := db.QueryRow(query, sql.Named("UserID", userID)).Scan(&user.ID, &user.Username, &user.Email, &user.ProfilePicture)
+    err := db.QueryRow(query, sql.Named("UserID", userID)).Scan(&user.ID, &user.Username, &user.Email)
     
     if err != nil {
         if err == sql.ErrNoRows {
