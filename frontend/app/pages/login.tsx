@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useAuth } from '../contexts/authContext'; // Импортируем useAuth
 
 const Login = () => {
   const router = useRouter();
-  const { login } = useAuth(); // Используем функцию login из контекста
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,27 +11,32 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
-  
-    console.log('Attempting login with email:', email);  // Логируем email перед отправкой
-  
+
+    console.log('Attempting login with email:', email); // Логируем email перед отправкой
+
     try {
+      // Отправляем запрос на сервер для получения токена
       const response = await axios.post('http://localhost:8000/login', {
         email,
         password: password,
       });
-  
+
       console.log('Login successful, token received:', response.data.token); // Логируем успешный ответ
-  
-      // Сохраняем токен в localStorage и обновляем состояние в контексте
+
+      // Сохраняем токен в localStorage (или sessionStorage)
       localStorage.setItem('token', response.data.token);
-      login(response.data.token); // Обновляем состояние isLoggedIn через контекст
-  
-      router.push('/');  // Перенаправляем на главную страницу
+
+      // Напрямую "авторизуем" пользователя
+      // Сохраняем токен и предполагаем, что он будет использоваться на всех страницах
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+
+      // Перенаправляем пользователя на главную страницу
+      router.push('/');
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data.error || 'Login failed');

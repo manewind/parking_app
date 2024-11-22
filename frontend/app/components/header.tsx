@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { useAuth } from '../contexts/authContext';
 
 const Header = () => {
-  const { isLoggedIn, profilePicture, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
 
   useEffect(() => {
-    console.log('Auth state changed:', isLoggedIn); // Добавьте для отладки
+    console.log('Auth state changed:', isLoggedIn); // Логирование для отладки
   }, [isLoggedIn]);
 
   return (
@@ -24,6 +24,7 @@ const Header = () => {
           </Link>
 
           {isLoggedIn ? (
+<<<<<<< HEAD
             <div className="flex items-center space-x-3">
               
               <button
@@ -43,6 +44,27 @@ const Header = () => {
               ) : null}
               </Link>
             </div>
+=======
+            <>
+              <button
+                onClick={logout}
+                className="hover:text-blue-400 text-l font-medium"
+              >
+                Logout
+              </button>
+
+              {/* Статическая картинка профиля, заменяем на "profilePicture.png" */}
+              <Link href="/profile">
+                
+                  <img
+                    src="/prfilePicture.png" // Указание статического пути к картинке
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+               
+              </Link>
+            </>
+>>>>>>> 02201e07c49f5b8e361898431aebad348678b19b
           ) : (
             <>
               <Link href="/login" className="hover:text-blue-400">
@@ -54,8 +76,11 @@ const Header = () => {
               
             </>
           )}
+<<<<<<< HEAD
 
           
+=======
+>>>>>>> 02201e07c49f5b8e361898431aebad348678b19b
         </nav>
       </div>
     </header>
