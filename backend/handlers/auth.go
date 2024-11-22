@@ -142,13 +142,8 @@ func MeHandler(c *gin.Context) {
     }
     defer dbConn.Close()
 
-<<<<<<< HEAD
-    user, err := services.GetUserByID(dbConn, int(userID))
-    fmt.Println(user,err)
-=======
     // Выполнение запроса к базе данных
     user, err := services.GetUserByID(dbConn, int(userIDFloat))
->>>>>>> 02201e07c49f5b8e361898431aebad348678b19b
     if err != nil {
         fmt.Printf("Ошибка поиска пользователя по ID: %v\n", err) // Логирование ошибки
         c.JSON(http.StatusNotFound, gin.H{
@@ -160,16 +155,8 @@ func MeHandler(c *gin.Context) {
     // Возвращение данных пользователя с логом
     fmt.Printf("Данные пользователя успешно получены для userID: %v\n", userIDFloat) // Лог успешного получения данных
     c.JSON(http.StatusOK, gin.H{
-<<<<<<< HEAD
         "username":      user.Username,
         "email":         user.Email,
-=======
-        "message":        "User data retrieved successfully",
-        "user_id":        userIDFloat,
-        "username":       user.Username,
-        "email":          user.Email,
-        "profilePicture": user.ProfilePicture,
->>>>>>> 02201e07c49f5b8e361898431aebad348678b19b
     })
 }
 

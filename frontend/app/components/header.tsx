@@ -24,27 +24,6 @@ const Header = () => {
           </Link>
 
           {isLoggedIn ? (
-<<<<<<< HEAD
-            <div className="flex items-center space-x-3">
-              
-              <button
-                onClick={logout}
-                className="hover:text-blue-400 text-xl font-medium"
-              >
-                Logout
-              </button>
-              <Link href="/profile">
-              {profilePicture ? (
-                <img
-                  src={profilePicture}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-
-              ) : null}
-              </Link>
-            </div>
-=======
             <>
               <button
                 onClick={logout}
@@ -64,7 +43,6 @@ const Header = () => {
                
               </Link>
             </>
->>>>>>> 02201e07c49f5b8e361898431aebad348678b19b
           ) : (
             <>
               <Link href="/login" className="hover:text-blue-400">
@@ -76,11 +54,8 @@ const Header = () => {
               
             </>
           )}
-<<<<<<< HEAD
 
           
-=======
->>>>>>> 02201e07c49f5b8e361898431aebad348678b19b
         </nav>
       </div>
     </header>

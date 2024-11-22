@@ -3,9 +3,9 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"parking_app/backend/models"
-	"parking_app/backend/services"
-	"parking_app/backend/db" // импорт вашей базы данных
+	"backend/models"
+	"backend/services"
+	"backend/db" // импорт вашей базы данных
 	"time"
 	"github.com/gin-gonic/gin"
 	"strconv"

@@ -2,7 +2,7 @@ package services
 
 import (
     "database/sql"
-    "parking_app/backend/models"
+    "backend/models"
     "fmt"
     "time"
 )

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"parking_app/backend/handlers" 
+	"backend/handlers" 
 	"github.com/gin-gonic/gin"
 )
 

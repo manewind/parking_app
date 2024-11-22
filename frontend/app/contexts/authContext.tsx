@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import axios from 'axios';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -36,7 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (token: string) => {
     localStorage.setItem('token', token);
-<<<<<<< HEAD
     setIsLoggedIn(true); // обновляем состояние, что пользователь залогинен
 
     axios
@@ -53,9 +53,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.error('Ошибка при получении данных пользователя:', error);
         logout(); // если ошибка - вызываем logout
       });
-=======
-    setIsLoggedIn(true); // Обновляем состояние логина при успешном входе
->>>>>>> 02201e07c49f5b8e361898431aebad348678b19b
   };
 
   const logout = () => {
